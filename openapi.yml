@@ -1,0 +1,110 @@
+openapi: 3.0.1
+info:
+  title: واسط برنامه نویسی سفارش خرید برخط
+  version: 1.0.0
+  description: یک واسط برنامه نویسی ابتدایی برای کار کردن با ابزارهای سواگر
+paths:
+  /orders:
+    summary: دریافت تمام سفارشات خرید
+    description: >-
+      این مسیر به منظور دریافت تمامی داده‌های برگه‌های سفارشات خرید از پرونده
+      orders.json استفاده شده است.
+    get:
+      summary: دریافت داده‌ سفارش خرید
+      description: دریافت اطلاعات سفارش خرید از پرونده orders.json
+      operationId: get_orders
+      responses:
+        "200":
+          description: "دریافت داده موفق"
+          content:
+            application/json:
+              examples:
+                سفارشات:
+                  value: |-
+                    {
+                      "orders": [
+                        { "name": "محمد هاشمی", "id": "001", "state": "منتظر" },
+                        { "name": "علی ابوطالبی", "id": "002", "state": "لغو" },
+                        { "name": "فاطمه محمدی", "id": "003", "state": "منتظر" },
+                        { "name": "حسن علوی", "id": "004", "state": "منتظر" }
+                      ]
+                    }
+        default:
+          description: Default error sample response
+      tags:
+        - سفارشات
+  /neworder:
+    summary: افزودن سفارش خرید
+    description: >-
+      این مسیر به منظور افزودن یک سفارش خرید جدید به پرونده orders.json استفاده
+      شده است.
+    post:
+      summary: افزودن داده سفارش خرید
+      description: افزودن یک سفارش خرید جدید به پرونده orders.json
+      operationId: post_neworder
+      requestBody:
+        description: یک سفارش جدید
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Order"
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - سفارشات
+  /update/{id}:
+    description: >-
+      این مسیر به منظور تغییر وضعیت یک سفارش خرید که با id مطابقت دارد استفاده
+      شده است. این خصوصیت state هر سفارش را تغییر میدهد.
+    put:
+      summary: بروزرسانی وضعیت سفارش خرید
+      description: >-
+        تغییر وضعیت یک سفارش خرید با بروزرسانی خصوصیت state هر سفارش که با id
+        مطابقت دارد
+      operationId: put_update
+      parameters:
+        - name: id
+          in: path
+          description: "شماره سفارش خرید"
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - سفارشات
+  /delete/{id}:
+    summary: حذف سفارش خرید
+    description: این مسیر به منظور حذف یک سفارش خرید که با id مطابقت دارد استفاده شده است.
+    delete:
+      summary: حذف سفارش خرید
+      description: حذف یک سفارش خرید که با id مطابقت دارد
+      operationId: delete_delete
+      parameters:
+        - name: id
+          in: path
+          description: "شماره سفارش خرید"
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - سفارشات
+
+components:
+  schemas:
+    Order:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+        state:
+          type: string
+      xml:
+        name: Order
